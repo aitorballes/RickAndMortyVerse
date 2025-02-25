@@ -7,38 +7,40 @@ class CharactersViewModel {
     
     var characters: [CharacterModel] = []
     var nextPage: String?
+    var isBusy: Bool = false
     
     func getCharacters() {
+        isBusy = true
         charactersService.getCharacters { [weak self] result in
             DispatchQueue.main.async {
-                guard let self = self, let result = result else { return }
+                guard let self = self, let result = result else {
+                    self?.isBusy = false
+                    return
+                }
                 self.characters = result.results ?? []
                 self.nextPage = result.info?.next
+                self.isBusy = false
             }
         }
     }
     
     func getCharactersByPage(page: String) {
+        isBusy = true
         charactersService.getCharactersByPage(page: page) { [weak self] result in
             DispatchQueue.main.async {
-                guard let self = self, let result = result else { return }
+                guard let self = self, let result = result else {
+                    self?.isBusy = false
+                    return
+                }
                 self.characters.append(contentsOf: result.results ?? [])
                 self.nextPage = result.info?.next
+                self.isBusy = false
             }
         }
     }
     
     func getNextCharacters() {
-        guard let page = nextPage, let pageNumber = extractPageNumber(from: page) else { return }
+        guard let page = nextPage, let pageNumber = page.extractPageNumber() else { return }
         getCharactersByPage(page: pageNumber)
-    }   
-    
-    private func extractPageNumber(from url: String) -> String? {
-        let pattern = "\\?page=(\\d+)"
-        guard let regex = try? NSRegularExpression(pattern: pattern),
-              let match = regex.firstMatch(in: url, range: NSRange(url.startIndex..., in: url)),
-              let range = Range(match.range(at: 1), in: url) else { return nil }
-        
-        return String(url[range])
     }
 }

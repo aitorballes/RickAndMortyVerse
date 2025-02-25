@@ -6,12 +6,22 @@ struct CharactersView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if let characters = viewModel.characters {
-                    ScrollView (showsIndicators: false){
+                if !viewModel.characters.isEmpty {
+                    ScrollView(showsIndicators: false) {
                         LazyVStack {
-                            ForEach(characters, id: \.self.id) { character in
-                                RowItemView(imageUrl: character.image, imageWidth: 60, imageHeight: 60, title: character.name, subtitle: character.status.rawValue.capitalized)
+                            ForEach(viewModel.characters, id: \.self.id) {
+                                character in
+                                RowItemView(
+                                    imageUrl: character.image, imageWidth: 60,
+                                    imageHeight: 60, title: character.name,
+                                    subtitle: character.status.rawValue.capitalized
+                                )
                                 .padding(.horizontal)
+                                .onAppear {
+                                    if character.id == viewModel.characters.last?.id {
+                                        viewModel.getNextCharacters()
+                                    }
+                                }
                             }
                         }
                     }
@@ -24,8 +34,13 @@ struct CharactersView: View {
                 }
             }
             .navigationBarTitle("Characters")
+            .overlay {
+                if viewModel.isBusy {
+                    ProgressView()
+                }
+            }
             .onAppear {
-                viewModel.getAllCharacters()
+                viewModel.getCharacters()
             }
         }
     }

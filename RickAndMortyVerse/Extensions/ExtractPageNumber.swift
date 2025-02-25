@@ -1,8 +1,12 @@
-//
-//  ExtractPageNumber.swift
-//  RickAndMortyVerse
-//
-//  Created by APPSPACE on 25/2/25.
-//
-
 import Foundation
+
+extension String {
+    func extractPageNumber() -> String? {
+        let pattern = "\\?page=(\\d+)"
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: self, range: NSRange(self.startIndex..., in: self)),
+              let range = Range(match.range(at: 1), in: self) else { return nil }
+        
+        return String(self[range])
+    }
+}

@@ -3,17 +3,17 @@ import XCTest
 
 class CharactersServiceTests: XCTestCase {
     
-    var charactersService: CharactersService!
+    var sut: CharactersService!
     var mockHttpService: MockHttpService!
     
     override func setUp() {
         super.setUp()
         mockHttpService = MockHttpService()
-        charactersService = CharactersService(httpService: mockHttpService) // Inyectamos el mock
+        sut = CharactersService(httpService: mockHttpService) // Inyectamos el mock
     }
     
     override func tearDown() {
-        charactersService = nil
+        sut = nil
         mockHttpService = nil
         super.tearDown()
     }
@@ -24,7 +24,7 @@ class CharactersServiceTests: XCTestCase {
         
         let expectation = self.expectation(description: "Fetch characters successfully")
         
-        charactersService.getCharacters { characters in
+        sut.getCharacters { characters in
             XCTAssertNotNil(characters)
             XCTAssertEqual(characters?.results?.first?.name, "Rick Sanchez")
             expectation.fulfill()
@@ -38,7 +38,7 @@ class CharactersServiceTests: XCTestCase {
         
         let expectation = self.expectation(description: "Fetch characters with error")
         
-        charactersService.getCharacters { characters in
+        sut.getCharacters { characters in
             XCTAssertNil(characters)
             expectation.fulfill()
         }
@@ -52,7 +52,7 @@ class CharactersServiceTests: XCTestCase {
         
         let expectation = self.expectation(description: "Fetch characters by page successfully")
         
-        charactersService.getCharactersByPage(page: "2") { characters in
+        sut.getCharactersByPage(page: "2") { characters in
             XCTAssertNotNil(characters)
             XCTAssertEqual(characters?.results?.first?.name, "Rick Sanchez")
             expectation.fulfill()
@@ -66,7 +66,7 @@ class CharactersServiceTests: XCTestCase {
         
         let expectation = self.expectation(description: "Fetch characters by page with error")
         
-        charactersService.getCharactersByPage(page: "2") { characters in
+        sut.getCharactersByPage(page: "2") { characters in
             XCTAssertNil(characters)
             expectation.fulfill()
         }

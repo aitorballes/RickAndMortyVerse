@@ -3,10 +3,14 @@ import Observation
 
 @Observable
 class CharactersViewModel {
-    private let charactersService = CharactersService()
+    private let charactersService: CharactersService
+    
+    init(charactersService: CharactersService = CharactersService()){
+        self.charactersService = charactersService
+    }
     
     var characters: [CharacterModel] = []
-    var nextPage: String?
+    var nextPage: String? 
     var isBusy: Bool = false
     
     func getCharacters() {

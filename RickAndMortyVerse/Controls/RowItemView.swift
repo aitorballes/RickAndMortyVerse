@@ -18,6 +18,7 @@ struct RowItemView: View {
                     Text(title)
                         .font(.body)
                         .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
                     Text("Status: \(subtitle)")
                     .font(.footnote)
                     .fontWeight(.light)

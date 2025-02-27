@@ -1,6 +1,6 @@
 import Foundation
 
-enum Gender: String, Codable {
+enum Gender: String, Codable, CaseIterable {
     case female = "Female"
     case male = "Male"
     case genderless = "Genderless"

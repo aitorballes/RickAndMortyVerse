@@ -1,6 +1,6 @@
 import Foundation
 
-enum Species: String, Codable {
+enum Species: String, Codable, CaseIterable {
     case alien = "Alien"
     case human = "Human"
     case humanoid = "Humanoid"

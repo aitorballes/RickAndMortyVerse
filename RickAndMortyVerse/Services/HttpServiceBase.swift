@@ -7,39 +7,21 @@ class HttpServiceBase {
     
     internal init() {}
     
-    func get<T: Decodable>(from endpoint: String, completion: @escaping (T?) -> Void) {
+    func get<T: Decodable>(from endpoint: String) async throws -> T {
         guard let url = URL(string: apiBaseUrl + endpoint) else {
-            completion(nil)
-            return
+            throw URLError(.badURL)
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            let jsonDecoder = JSONDecoder()
-            
-            if let error = error {
-                print(error)
-                completion(nil)
-                return
-            }
-            
-            guard let data = data else {
-                print("Data was nil")
-                completion(nil)
-                return
-            }
-            
-            do {
-                let decodedData = try jsonDecoder.decode(T.self, from: data)
-                completion(decodedData)
-            } catch {
-                print("Error decoding: \(error)")
-                completion(nil)
-            }
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse)
         }
         
-        task.resume()
+        let jsonDecoder = JSONDecoder()
+        return try jsonDecoder.decode(T.self, from: data)
     }
 }

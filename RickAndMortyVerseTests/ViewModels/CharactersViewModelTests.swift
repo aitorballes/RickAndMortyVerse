@@ -19,222 +19,141 @@ class CharactersViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testGetCharacters_Success() {
-        // Arrange
+    func testGetCharacters_Success() async {
         let expectedCharacterName = "Rick Sanchez"
-        let expectedNextPage =
-            "https://rickandmortyapi.com/api/character?page=2"
-        let mockResponse = getMockData(
-            characterName: expectedCharacterName, nextPage: expectedNextPage)
+        let expectedNextPage = "https://rickandmortyapi.com/api/character?page=2"
+        let mockResponse = getMockData(characterName: expectedCharacterName, nextPage: expectedNextPage)
         mockCharactersService.mockResult = mockResponse
 
-        let expectation = self.expectation(description: "Characters loaded")
+        await sut.getCharacters()
 
-        // Act
-        sut.getCharacters()
-
-        // Assert
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertFalse(self.sut.isBusy)
-            XCTAssertEqual(self.sut.characters.count, 2)
-            XCTAssertEqual(
-                self.sut.characters.first?.name, expectedCharacterName)
-            XCTAssertEqual(self.sut.nextPage, expectedNextPage)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertEqual(sut.characters.count, 2)
+        XCTAssertEqual(sut.characters.first?.name, expectedCharacterName)
+        XCTAssertEqual(sut.nextPage, expectedNextPage)
     }
 
-    func testGetCharactersByPage_Success() {
-        // Arrange
+    func testGetCharactersByPage_Success() async {
         let expectedCharacterName = "Rick Sanchez"
-        let expectedNextPage =
-            "https://rickandmortyapi.com/api/character?page=3"
-        let mockResponse = getMockData(
-            characterName: expectedCharacterName, nextPage: expectedNextPage)
-
+        let expectedNextPage = "https://rickandmortyapi.com/api/character?page=3"
+        let mockResponse = getMockData(characterName: expectedCharacterName, nextPage: expectedNextPage)
         mockCharactersService.mockResult = mockResponse
 
-        let expectation = self.expectation(
-            description: "Characters by page loaded")
+        await sut.getCharactersByPage(page: "2")
 
-        // Act
-        sut.getCharactersByPage(page: "2")
-
-        // Assert
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertFalse(self.sut.isBusy)
-            XCTAssertEqual(self.sut.characters.count, 2)
-            XCTAssertEqual(
-                self.sut.characters.first?.name, expectedCharacterName)
-            XCTAssertEqual(self.sut.nextPage, expectedNextPage)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertEqual(sut.characters.count, 2)
+        XCTAssertEqual(sut.characters.first?.name, expectedCharacterName)
+        XCTAssertEqual(sut.nextPage, expectedNextPage)
     }
 
-    func testGetNextCharacters_Success() {
-        // Arrange
-        let expectedNextPage =
-            "https://rickandmortyapi.com/api/character?page=3"
+    func testGetNextCharacters_Success() async {
+        let expectedNextPage = "https://rickandmortyapi.com/api/character?page=3"
         let mockResponse = getMockData(nextPage: expectedNextPage)
         mockCharactersService.mockResult = mockResponse
 
-        sut.getCharacters()
+        await sut.getCharacters()
+        await sut.getNextCharacters()
 
-        let expectation = self.expectation(
-            description: "Next characters loaded")
-
-        // Act
-        sut.getNextCharacters()
-
-        // Assert
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertFalse(self.sut.isBusy)
-            XCTAssertEqual(self.sut.characters.count, 2)
-            XCTAssertEqual(self.sut.nextPage, expectedNextPage)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertEqual(sut.characters.count, 4)
+        XCTAssertEqual(sut.nextPage, expectedNextPage)
     }
 
-    func testGetCharacters_Failure() {
-        // Arrange
+    func testGetCharacters_Failure() async {
         mockCharactersService.mockResult = nil
 
-        let expectation = self.expectation(
-            description: "Characters load failed")
+        await sut.getCharacters()
 
-        // Act
-        sut.getCharacters()
-
-        // Assert
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertFalse(self.sut.isBusy)
-            XCTAssertTrue(self.sut.characters.isEmpty)
-            XCTAssertNil(self.sut.nextPage)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertTrue(sut.characters.isEmpty)
+        XCTAssertNil(sut.nextPage)
     }
 
-    func testGetCharactersByPage_Failure() {
-        // Arrange
+    func testGetCharactersByPage_Failure() async {
         mockCharactersService.mockResult = nil
 
-        let expectation = self.expectation(
-            description: "Characters by page load failed")
+        await sut.getCharactersByPage(page: "2")
 
-        // Act
-        sut.getCharactersByPage(page: "2")
-
-        // Assert
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertFalse(self.sut.isBusy)
-            XCTAssertTrue(self.sut.characters.isEmpty)
-            XCTAssertNil(self.sut.nextPage)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertTrue(sut.characters.isEmpty)
+        XCTAssertNil(sut.nextPage)
     }
 
-    func testGetNextCharacters_NoNextPage() {
-        // Arrange
+    func testGetNextCharacters_NoNextPage() async {
         sut.nextPage = nil
 
-        let expectation = self.expectation(description: "No next page")
+        await sut.getNextCharacters()
 
-        // Act
-        sut.getNextCharacters()
-
-        // Assert
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertFalse(self.sut.isBusy)
-            XCTAssertTrue(self.sut.characters.isEmpty)
-            XCTAssertNil(self.sut.nextPage)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertTrue(sut.characters.isEmpty)
+        XCTAssertNil(sut.nextPage)
     }
 
-    func testGetCharacters_IsBusyState() {
-        // Arrange
+    func testGetCharacters_IsBusyState() async {
         let mockResponse = getMockData()
         mockCharactersService.mockResult = mockResponse
 
-        let expectation = self.expectation(description: "IsBusy state updated")
+        await sut.getCharacters()
 
-        // Act
-        sut.getCharacters()
-
-        // Assert
-        XCTAssertTrue(self.sut.isBusy)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            XCTAssertFalse(self.sut.isBusy)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertFalse(sut.isBusy)
     }
+    
+    func testApplyFilters_Success() async {
+        let expectedCharacterName = "Filtered Rick"
+        let mockResponse = getMockData(characterName: expectedCharacterName)
+        mockCharactersService.mockResult = mockResponse
+
+        await sut.applyFilters(searchText: "Rick", gender: .male, status: .alive, species: .human)
+
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertEqual(sut.characters.count, 2)
+        XCTAssertEqual(sut.characters.first?.name, expectedCharacterName)
+    }
+
+    func testApplyFilters_NoResults() async {
+        mockCharactersService.mockResult = CharactersRequestModel(info: nil, results: [])
+
+        await sut.applyFilters(searchText: "Unknown", gender: nil, status: nil, species: nil)
+
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertTrue(sut.characters.isEmpty)
+    }
+
+    func testApplyFilters_Failure() async {
+        mockCharactersService.mockResult = nil
+
+        await sut.applyFilters(searchText: "Rick", gender: .male, status: .alive, species: .human)
+
+        XCTAssertFalse(sut.isBusy)
+        XCTAssertTrue(sut.characters.isEmpty)
+    }
+    
+    func testExtractPageNumber() {
+        let url = "https://rickandmortyapi.com/api/character?page=2"
+        let pageNumber = url.extractPageNumber()
+        XCTAssertEqual(pageNumber, "2")
+    }
+
 
     private func getMockData(characterName: String = "", nextPage: String = "")
         -> CharactersRequestModel
     {
-        CharactersRequestModel(
-            info: .init(
-                count: 1,
-                pages: 1,
-                next: nextPage
-            ),
+        return CharactersRequestModel(
+            info: .init(count: 1, pages: 1, next: nextPage),
             results: [
                 .init(
-                    id: 1,
-                    name: characterName,
-                    status: .alive,
-                    species: .alien,
-                    type: "Type",
-                    gender: .unknown,
-                    origin: .init(
-                        name: "Location",
-                        url: "LocationUrl"
-                    ),
-                    location: .init(
-                        name: "Location",
-                        url: "LocationUrl"
-                    ),
-                    image: "image",
-                    episode: [],
-                    url: "url",
-                    created: ""
-                ),
+                    id: 1, name: characterName, status: .alive, species: .alien,
+                    type: "Type", gender: .unknown,
+                    origin: .init(name: "Location", url: "LocationUrl"),
+                    location: .init(name: "Location", url: "LocationUrl"),
+                    image: "image", episode: [], url: "url", created: ""),
                 .init(
-                    id: 2,
-                    name: "Name",
-                    status: .alive,
-                    species: .alien,
-                    type: "Type",
-                    gender: .unknown,
-                    origin: .init(
-                        name: "Location",
-                        url: "LocationUrl"
-                    ),
-                    location: .init(
-                        name: "Location",
-                        url: "LocationUrl"
-                    ),
-                    image: "image",
-                    episode: [],
-                    url: "url",
-                    created: ""
-                ),
-
+                    id: 2, name: "Name", status: .alive, species: .alien,
+                    type: "Type", gender: .unknown,
+                    origin: .init(name: "Location", url: "LocationUrl"),
+                    location: .init(name: "Location", url: "LocationUrl"),
+                    image: "image", episode: [], url: "url", created: ""),
             ]
         )
     }

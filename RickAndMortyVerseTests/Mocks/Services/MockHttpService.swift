@@ -2,29 +2,22 @@ import Foundation
 @testable import RickAndMortyVerse
 
 class MockHttpService: HttpServiceBase {
-    
     var mockData: Data?
     var mockError: Error?
     
-    override func get<T: Decodable>(from endpoint: String, completion: @escaping (T?) -> Void) {
+    override func get<T: Decodable>(from endpoint: String) async throws -> T {
         if let error = mockError {
-            print(error)
-            completion(nil)
-            return
+            throw error
         }
         
         guard let data = mockData else {
-            print("Data was nil")
-            completion(nil)
-            return
+            throw URLError(.badServerResponse)
         }
         
         do {
-            let decodedData = try JSONDecoder().decode(T.self, from: data)
-            completion(decodedData)
+            return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            print("Error decoding: \(error)")
-            completion(nil)
+            throw error
         }
     }
 }

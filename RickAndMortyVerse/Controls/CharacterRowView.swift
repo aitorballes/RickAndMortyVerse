@@ -1,25 +1,25 @@
 import SwiftUI
+import CoreData
 
-struct RowItemView: View {
-    let imageUrl: String
-    let imageWidth: CGFloat
-    let imageHeight: CGFloat
-    let title: String
-    let subtitle: String
+struct CharacterRowView: View {
+    let character: CharacterModel
+    let imageWidth = 60.0
+    let imageHeight = 60.0
+    let context: NSManagedObjectContext
     
     var body: some View {
         NavigationLink {
-            Text("Detail character view")
+            CharacterDetailView(character: character, context: context)
         } label: {
             HStack {
-                CustomImageView(imageUrl: imageUrl, width: imageWidth, height: imageHeight)
+                CustomImageView(imageUrl: character.image, width: imageWidth, height: imageHeight, cornerRadius: 12)
 
                 VStack(alignment: .leading) {
-                    Text(title)
+                    Text(character.name)
                         .font(.body)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
-                    Text("Status: \(subtitle)")
+                    Text("Status: \(character.status.rawValue.capitalized)")
                     .font(.footnote)
                     .fontWeight(.light)
                 }
@@ -36,6 +36,3 @@ struct RowItemView: View {
     }
 }
 
-#Preview {
-    RowItemView(imageUrl: "https://rickandmortyapi.com/api/character/avatar/361.jpeg", imageWidth: 50, imageHeight: 50, title: "Title", subtitle: "Subtitle")
-}

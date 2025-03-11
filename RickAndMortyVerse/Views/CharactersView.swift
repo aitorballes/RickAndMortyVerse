@@ -1,7 +1,9 @@
 import SwiftUI
+import CoreData
 
 struct CharactersView: View {
     @Environment(CharactersViewModel.self) var viewModel
+    @Environment(\.managedObjectContext) private var context
     @State private var isFilterOpen: Bool = false
     @State private var searchText: String = ""
     @State private var selectedGender: Gender?
@@ -65,12 +67,7 @@ struct CharactersView: View {
                         LazyVStack {
                             ForEach(viewModel.characters, id: \.self.id) {
                                 character in
-                                RowItemView(
-                                    imageUrl: character.image, imageWidth: 60,
-                                    imageHeight: 60, title: character.name,
-                                    subtitle: character.status.rawValue
-                                        .capitalized
-                                )
+                                CharacterRowView(character: character, context: context)
                                 .padding(.horizontal)
                                 .onAppear {
                                     if character.id == viewModel.characters.last?.id {
@@ -131,4 +128,5 @@ struct CharactersView: View {
 #Preview {
     CharactersView()
         .environment(CharactersViewModel())
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

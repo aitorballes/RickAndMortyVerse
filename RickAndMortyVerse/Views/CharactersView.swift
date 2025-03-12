@@ -128,5 +128,4 @@ struct CharactersView: View {
 #Preview {
     CharactersView()
         .environment(CharactersViewModel())
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

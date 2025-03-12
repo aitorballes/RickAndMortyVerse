@@ -1,10 +1,3 @@
-//
-//  RickAndMortyVerseApp.swift
-//  RickAndMortyVerse
-//
-//  Created by APPSPACE on 24/2/25.
-//
-
 import SwiftUI
 
 @main
@@ -13,7 +6,8 @@ struct RickAndMortyVerseApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CharactersView()
+                .environment(CharactersViewModel())
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

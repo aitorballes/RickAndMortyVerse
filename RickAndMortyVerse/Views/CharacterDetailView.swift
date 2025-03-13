@@ -27,7 +27,7 @@ struct CharacterDetailView: View {
 
         Form {
             CustomImageView(
-                imageUrl: character.image, width: .infinity, height: 300,
+                imageUrl: character.image, width: 300, height: 300,
                 cornerRadius: 20
             )
             .padding()

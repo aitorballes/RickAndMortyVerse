@@ -19,6 +19,7 @@ struct CharacterRowView: View {
                         .font(.body)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
+                        .accessibilityIdentifier("characterName_\(character.name.replacingOccurrences(of: " ", with: "_"))")
                     Text("Status: \(character.status.rawValue.capitalized)")
                     .font(.footnote)
                     .fontWeight(.light)

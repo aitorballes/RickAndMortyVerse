@@ -1,5 +1,5 @@
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct CharactersView: View {
     @Environment(CharactersViewModel.self) var viewModel
@@ -17,18 +17,19 @@ struct CharactersView: View {
                 gender: selectedGender, status: selectedStatus,
                 species: selectedSpecies)
         }
-        
+
     }
 
     func resetFilters() {
         selectedGender = nil
         selectedStatus = nil
         selectedSpecies = nil
-        Task{
-            await viewModel.applyFilters(searchText: searchText, gender: nil, status: nil, species: nil)
+        Task {
+            await viewModel.applyFilters(
+                searchText: searchText, gender: nil, status: nil, species: nil)
         }
     }
-    
+
     var hasFilters: Bool {
         selectedGender != nil || selectedStatus != nil || selectedSpecies != nil
     }
@@ -44,20 +45,28 @@ struct CharactersView: View {
                             selectedStatus: $selectedStatus,
                             selectedSpecies: $selectedSpecies
                         )
-                        .onChange(of: selectedSpecies,{ _, _ in applyFilters()})
-                        .onChange(of: selectedGender,{ _, _ in applyFilters()})
-                        .onChange(of: selectedStatus,{ _, _ in applyFilters()})
-                        
+                        .onChange(
+                            of: selectedSpecies, { _, _ in applyFilters() }
+                        )
+                        .onChange(
+                            of: selectedGender, { _, _ in applyFilters() }
+                        )
+                        .onChange(
+                            of: selectedStatus, { _, _ in applyFilters() })
+
                         if hasFilters {
                             Button {
                                 resetFilters()
                             } label: {
-                                Image(systemName: "slider.horizontal.2.arrow.trianglehead.counterclockwise")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20, height: 20)
+                                Image(
+                                    systemName:
+                                        "slider.horizontal.2.arrow.trianglehead.counterclockwise"
+                                )
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
                             }
-                        }                        
+                        }
                     }
 
                 }
@@ -89,7 +98,16 @@ struct CharactersView: View {
             }
             .navigationBarTitle("Characters")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        FavoriteCharactersView(context: context)
+                    } label: {
+                        Image(systemName: "star.fill")
+                            .imageScale(.large)
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         withAnimation {
                             isFilterOpen.toggle()
@@ -98,6 +116,7 @@ struct CharactersView: View {
                         Image(systemName: "slider.vertical.3")
                             .imageScale(.large)
                     }
+                    .accessibilityIdentifier("filtersButton")
                 }
             }
             .searchable(

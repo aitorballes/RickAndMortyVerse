@@ -20,6 +20,7 @@ struct CharactersFilterView: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .accessibilityIdentifier("genderPicker")
 
             Picker("Status", selection: $selectedStatus) {
                 Text("Status")
@@ -32,6 +33,8 @@ struct CharactersFilterView: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .accessibilityIdentifier("statusPicker")
+
             
             Picker("Species", selection: $selectedSpecies) {
                 Text("Species")
@@ -44,6 +47,8 @@ struct CharactersFilterView: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .accessibilityIdentifier("speciesPicker")
+
             
             Spacer()
         }

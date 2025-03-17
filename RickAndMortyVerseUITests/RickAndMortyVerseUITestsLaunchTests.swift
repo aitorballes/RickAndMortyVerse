@@ -1,10 +1,3 @@
-//
-//  RickAndMortyVerseUITestsLaunchTests.swift
-//  RickAndMortyVerseUITests
-//
-//  Created by APPSPACE on 24/2/25.
-//
-
 import XCTest
 
 final class RickAndMortyVerseUITestsLaunchTests: XCTestCase {

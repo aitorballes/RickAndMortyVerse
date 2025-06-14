@@ -4,4 +4,6 @@ struct CharacterFiltersModel {
     let gender: Gender?
     let status: Status?
     let species: Species?
+    
+ 
 }

@@ -28,7 +28,7 @@ struct SplashScreenView: View {
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 0.5)) {
-                self.isAnimated = true
+                isAnimated = true
             }
         }
     }

@@ -1,6 +1,6 @@
 import Foundation
 
-struct CharacterModel: Codable {
+struct CharacterModel: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
     let status: Status
@@ -8,8 +8,8 @@ struct CharacterModel: Codable {
     let type: String
     let gender: Gender
     let origin, location: LocationModel
-    let image: String
+    let image: URL
     let episode: [String]
-    let url: String
-    let created: String
+    let url: URL
+    let created: Date
 }

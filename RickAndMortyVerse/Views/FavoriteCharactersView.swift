@@ -1,5 +1,6 @@
 import CoreData
 import SwiftUI
+import CachedImageModule
 
 struct FavoriteCharactersView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -18,7 +19,7 @@ struct FavoriteCharactersView: View {
                 List {
                     ForEach(viewModel.favoriteCharacters, id: \.self) { character in
                         HStack {
-                            CustomImageView(imageUrl: character.image ?? "", width: 60, height: 60, cornerRadius: 12)
+                            CachedImageView(imageUrl: character.image, size: 60)
 
                             VStack(alignment: .leading) {
                                 Text(character.name ?? "")

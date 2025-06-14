@@ -34,10 +34,10 @@ final class CharacterDetailViewModelTests: XCTestCase {
                 name: "Location",
                 url: "LocationUrl"
             ),
-            image: "image",
+            image: URL(string: "https://www.imageTest.com")!,
             episode: [],
-            url: "url",
-            created: ""
+            url: URL(string: "https://www.urlTest.com")!,
+            created: Date()
         )
         
         

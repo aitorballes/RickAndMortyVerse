@@ -6,11 +6,10 @@ import Observation
 class FavoriteCharactersViewModel {
     var favoriteCharacters: [FavoriteCharacter] = []
     
-    private let context: NSManagedObjectContext
+    let context: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
-        self.context = context
-        fetchFavorites()
+        self.context = context        
     }
     
     func fetchFavorites() {

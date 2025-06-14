@@ -5,12 +5,13 @@ struct CharacterListView: View {
     @Environment(CharacterListViewModel.self) var viewModel
     @Environment(\.managedObjectContext) private var context
     
+    @State private var navigationPath = NavigationPath()
     @State private var isFilterOpen: Bool = false
     @State private var showButton = false
 
     var body: some View {
         @Bindable var viewModel = viewModel
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             VStack {
                 if isFilterOpen {
                     HStack {
@@ -51,7 +52,7 @@ struct CharacterListView: View {
                         LazyVStack {
                             ForEach(viewModel.characters) { character in
                                 
-                                NavigationLink(value: character) {
+                                NavigationLink(value: Route.character(character)) {
                                     CharacterRowView(
                                         character: character
                                     )
@@ -123,9 +124,15 @@ struct CharacterListView: View {
                 }
                 
             }
-            .navigationDestination(for: CharacterModel.self) { character in
-                CharacterDetailView(character: character, context: context)
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .character(let character):
+                    CharacterDetailView(viewModel: CharacterDetailViewModel(character: character, context: context))
+                case .favorites:
+                    FavoriteCharactersView(viewModel: FavoriteCharactersViewModel(context: context))
+                }
             }
+
             .navigationBarTitle("Characters")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -133,8 +140,8 @@ struct CharacterListView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        FavoriteCharactersView(context: context)
+                    Button {
+                        navigationPath.append(Route.favorites)
                     } label: {
                         Image(systemName: "star.fill")
                             .imageScale(.large)
@@ -166,7 +173,6 @@ struct CharacterListView: View {
                 Text(viewModel.errorMessage)
             }
             .task {
-                guard viewModel.characters.isEmpty else { return }
                 await viewModel.getCharacters()
             }
 

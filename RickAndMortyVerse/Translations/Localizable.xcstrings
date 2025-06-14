@@ -62,7 +62,14 @@
       }
     },
     "English" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inglés"
+          }
+        }
+      }
     },
     "Episodes" : {
       "localizations" : {
@@ -75,7 +82,14 @@
       }
     },
     "Error" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
     },
     "Favorite Characters" : {
       "localizations" : {
@@ -83,6 +97,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personajes favoritos"
+          }
+        }
+      }
+    },
+    "Favorites" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favoritos"
           }
         }
       }
@@ -108,7 +132,14 @@
       }
     },
     "Language" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
+          }
+        }
+      }
     },
     "Location" : {
       "localizations" : {
@@ -161,7 +192,14 @@
       }
     },
     "Spanish" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español"
+          }
+        }
+      }
     },
     "Species" : {
       "localizations" : {

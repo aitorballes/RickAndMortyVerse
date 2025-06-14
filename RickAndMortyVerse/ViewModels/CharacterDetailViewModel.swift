@@ -3,10 +3,11 @@ import Foundation
 import Observation
 
 @Observable
-class CharacterDetailViewModel {
+class CharacterDetailViewModel {    
+    let character: CharacterModel
+    let context: NSManagedObjectContext
+    
     var isFavorite: Bool = false
-    private var character: CharacterModel
-    private var context: NSManagedObjectContext
 
     init(character: CharacterModel, context: NSManagedObjectContext) {
         self.character = character
@@ -14,6 +15,8 @@ class CharacterDetailViewModel {
 
         checkIfFavorite()
     }
+    
+    
 
     func toogleFavorite() {
         if isFavorite {

@@ -101,16 +101,6 @@
         }
       }
     },
-    "Favorites" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Favoritos"
-          }
-        }
-      }
-    },
     "Gender" : {
       "localizations" : {
         "es" : {
